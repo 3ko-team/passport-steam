@@ -8,7 +8,7 @@ There is currently a vulnerability in the original [passport-steam](https://gith
 ## Installation
 
 ```bash
-$ npm install --save modern-passport-steam
+$ npm install --save @dessly/passport-steam
 ```
 
 ## Contents
@@ -52,7 +52,7 @@ Example options object:
 #### Require Strategy
 
 ```js
-const SteamStrategy = require('modern-passport-steam');
+const SteamStrategy = require('@dessly/passport-steam');
 ```
 
 #### Configure Strategy

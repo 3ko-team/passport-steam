@@ -1,5 +1,5 @@
 {
-	"name": "modern-passport-steam",
+	"name": "@dessly/passport-steam",
 	"version": "1.1.4",
 	"description": "A modern passport strategy for steam with hopefully no bugs!",
 	"main": "src/index.js",
@@ -19,7 +19,6 @@
 		"eslint-plugin-require-path-exists": "^1.1.9",
 		"eslint-plugin-security": "^1.7.1"
 	},
-	"author": "Easton S. (sampli)",
 	"license": "MIT",
 	"dependencies": {
 		"passport-strategy": "^1.0.0",
