@@ -21,6 +21,7 @@ const {
  *   returnUrl: 'http://yourdomain.com/auth/steam/return',
  *   fetchSteamLevel: true,
  *   fetchUserProfile: true,
+ *   passReqToCallback: true,
  *   apiKey: () => {
  *     // You should return your Steam API key here
  *     // For security, you should use environment variables or a secure key management service
@@ -40,6 +41,7 @@ class SteamStrategy extends Strategy {
 	 * @param {string | Function} options.apiKey - The Steam API key to use for fetching user data.
 	 * @param {boolean} [options.fetchUserProfile=true] - Whether to fetch the user's profile. Default is `true`.
 	 * @param {boolean} [options.fetchSteamLevel=false] - Whether to fetch the user's steam level. Default is `false`.
+    * @param {boolean} [options.passReqToCallback=false] - Whether to pass the request
 	 * @param {Function} verify - The verification function for the strategy.
 	 */
 	constructor(options, verify) {
@@ -52,6 +54,7 @@ class SteamStrategy extends Strategy {
 		this._apiKey = options.apiKey;
 		this._fetchUserProfile = options.fetchUserProfile ?? true;
 		this._fetchSteamLevel = options.fetchSteamLevel ?? false;
+		this._passReqToCallback = options.passReqToCallback ?? false;
 
 		if(!this._realm) {
 			throw new Error('OpenID realm is required');
@@ -63,8 +66,6 @@ class SteamStrategy extends Strategy {
 		if((this._fetchUserProfile || this._fetchSteamLevel) && !this._apiKey) {
 			throw new Error('Steam API key is required to fetch user data. Set fetchUserProfile to false if you do not want to include a Steam API key');
 		}
-
-		
 	}
 
 	/**
@@ -118,6 +119,10 @@ class SteamStrategy extends Strategy {
 			this._verify(user, (err, user) => {
 				if(err) {
 					return this.error(err);
+				}
+
+				if(this._passReqToCallback) {
+					return this.success(req, user);
 				}
 
 				return this.success(user);
