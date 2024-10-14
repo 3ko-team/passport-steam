@@ -122,7 +122,7 @@ class SteamStrategy extends Strategy {
 				}
 
 				if(this._passReqToCallback) {
-					return this.success(req, user);
+					return this.success(user, req);
 				}
 
 				return this.success(user);
