@@ -41,7 +41,7 @@ class SteamStrategy extends Strategy {
 	 * @param {string | Function} options.apiKey - The Steam API key to use for fetching user data.
 	 * @param {boolean} [options.fetchUserProfile=true] - Whether to fetch the user's profile. Default is `true`.
 	 * @param {boolean} [options.fetchSteamLevel=false] - Whether to fetch the user's steam level. Default is `false`.
-    * @param {boolean} [options.passReqToCallback=false] - Whether to pass the request
+	 * @param {boolean} [options.passReqToCallback=false] - Whether to pass the request
 	 * @param {Function} verify - The verification function for the strategy.
 	 */
 	constructor(options, verify) {
@@ -116,17 +116,23 @@ class SteamStrategy extends Strategy {
 			// Fetch the user's profile and steam level
 			const user = await this.fetchUserData(userSteamId);
 
-			this._verify(user, (err, user) => {
-				if(err) {
-					return this.error(err);
-				}
+			if(this._passReqToCallback) {
+				this._verify(req, user, (err, user) => {
+					if(err) {
+						return this.error(err);
+					}
 
-				if(this._passReqToCallback) {
-					user.req = req;
-				}
+					return this.success(user);
+				});
+			} else{
+				this._verify(user, (err, user) => {
+					if(err) {
+						return this.error(err);
+					}
 
-				return this.success(user);
-			});
+					return this.success(user);
+				});
+			}
 		} catch(err) {
 			return this.fail(err);
 		}
