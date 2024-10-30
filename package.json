@@ -1,6 +1,6 @@
 {
 	"name": "@dessly/passport-steam",
-	"version": "2.0.3",
+	"version": "3.0.0",
 	"description": "A modern passport strategy for steam with hopefully no bugs!",
 	"main": "src/index.js",
 	"keywords": [

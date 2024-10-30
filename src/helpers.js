@@ -83,13 +83,6 @@ function extractClaimedId(query) {
  * @throws {Error} If the query cannot be sanitized
  */
 function sanitizeQuery(query, expectedRealm) {
-	const unknownQueryParams = Object.keys(query)
-		.some(
-			(property) => !ALLOWED_PARAMS.includes(property)
-		);
-
-	assert(unknownQueryParams, `Unknown query parameters found: ${unknownQueryParams.join(', ')}`);
-
 	// Set these params here to avoid any potential for malicious user input overwriting them
 	// we will never use `query` after this point
 	const sanitizedQuery = {
@@ -97,6 +90,9 @@ function sanitizeQuery(query, expectedRealm) {
 		'openid.ns': 'http://specs.openid.net/auth/2.0',
 		'openid.mode': 'check_authentication'
 	};
+
+	const unknownQueryParams = !Object.keys(sanitizedQuery).some((property) => !ALLOWED_PARAMS.includes(property));
+	assert(unknownQueryParams, 'Unknown query parameters found');
 
 	// Check openid.return_to from our query object, because it's very important that it be a signed parameter.
 	assert(sanitizedQuery['openid.return_to'], 'No "openid.return_to" parameter is present in the URL');
