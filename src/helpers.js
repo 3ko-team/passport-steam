@@ -1,7 +1,7 @@
 const assert = require('assert');
 const SteamID = require('steamid');
 
-const { REQUIRED_PARAMS, REQUIRED_SIGNED_PARAMS } = require('./constants');
+const { REQUIRED_PARAMS, REQUIRED_SIGNED_PARAMS, ALLOWED_PARAMS } = require('./constants');
 
 /**
  * Canonicalizes a realm URL
@@ -83,6 +83,13 @@ function extractClaimedId(query) {
  * @throws {Error} If the query cannot be sanitized
  */
 function sanitizeQuery(query, expectedRealm) {
+	const unknownQueryParams = Object.keys(query)
+		.some(
+			(property) => !ALLOWED_PARAMS.includes(property)
+		);
+
+	assert(unknownQueryParams, `Unknown query parameters found: ${unknownQueryParams.join(', ')}`);
+
 	// Set these params here to avoid any potential for malicious user input overwriting them
 	// we will never use `query` after this point
 	const sanitizedQuery = {
